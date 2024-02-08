@@ -108,4 +108,5 @@ export type AxisProps<
   formatYLabel: (label: RawData[YK]) => string;
   isNumericalData?: boolean;
   ix: InputFields<RawData>[XK][];
+  hideGridLine: boolean | { x: boolean; y: boolean };
 };

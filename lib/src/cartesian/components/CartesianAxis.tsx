@@ -35,6 +35,7 @@ export const CartesianAxis = <
   font,
   isNumericalData = false,
   ix,
+  hideGridLine,
 }: AxisProps<RawData, XK, YK>) => {
   const axisConfiguration = useMemo(() => {
     return {
@@ -59,6 +60,10 @@ export const CartesianAxis = <
       gridLineWidth: typeof lineWidth === "number" ? lineWidth : lineWidth.grid,
       frameLineWidth:
         typeof lineWidth === "number" ? lineWidth : lineWidth.frame,
+      hideXGridLine:
+        typeof hideGridLine === "boolean" ? hideGridLine : hideGridLine.x,
+      hideYGridLine:
+        typeof hideGridLine === "boolean" ? hideGridLine : hideGridLine.y,
     } as const;
   }, [
     tickCount,
@@ -68,6 +73,7 @@ export const CartesianAxis = <
     labelPosition,
     lineColor,
     lineWidth,
+    hideGridLine,
   ]);
 
   const {
@@ -83,6 +89,8 @@ export const CartesianAxis = <
     frameLineColor,
     gridLineWidth,
     frameLineWidth,
+    hideXGridLine,
+    hideYGridLine,
   } = axisConfiguration;
 
   const [x1 = 0, x2 = 0] = xScale.domain();
@@ -115,12 +123,14 @@ export const CartesianAxis = <
 
     return (
       <React.Fragment key={`y-tick-${tick}`}>
-        <Line
-          p1={vec(xScale(x1), yScale(tick))}
-          p2={vec(xScale(x2), yScale(tick))}
-          color={gridLineColor}
-          strokeWidth={gridLineWidth}
-        />
+        {hideYGridLine ? null : (
+          <Line
+            p1={vec(xScale(x1), yScale(tick))}
+            p2={vec(xScale(x2), yScale(tick))}
+            color={gridLineColor}
+            strokeWidth={gridLineWidth}
+          />
+        )}
         {font
           ? canFitLabelContent && (
               <Text
@@ -165,12 +175,14 @@ export const CartesianAxis = <
 
     return (
       <React.Fragment key={`x-tick-${tick}`}>
-        <Line
-          p1={vec(xScale(tick), yScale(y2))}
-          p2={vec(xScale(tick), yScale(y1))}
-          color={gridLineColor}
-          strokeWidth={gridLineWidth}
-        />
+        {hideXGridLine ? null : (
+          <Line
+            p1={vec(xScale(tick), yScale(y2))}
+            p2={vec(xScale(tick), yScale(y1))}
+            color={gridLineColor}
+            strokeWidth={gridLineWidth}
+          />
+        )}
         {font && labelWidth && canFitLabelContent ? (
           <Text
             color={typeof labelColor === "string" ? labelColor : labelColor.x}
@@ -226,4 +238,5 @@ CartesianAxis.defaultProps = {
   formatYLabel: (label: ValueOf<InputDatum>) => String(label),
   labelColor: "#000000",
   ix: [],
+  hideGridLine: false,
 } satisfies Partial<AxisProps<never, never, never>>;
