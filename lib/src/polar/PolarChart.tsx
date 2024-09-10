@@ -24,6 +24,7 @@ type PolarChartBaseProps = {
   canvasSize: { width: number; height: number };
   containerStyle?: StyleProp<ViewStyle>;
   canvasStyle?: StyleProp<ViewStyle>;
+  diagramSize?: { width: number; height: number };
 };
 
 const PolarChartBase = (
@@ -36,6 +37,7 @@ const PolarChartBase = (
     onLayout,
     hasMeasuredLayoutSize,
     canvasSize,
+    diagramSize,
   } = props;
   const { width, height } = canvasSize;
 
@@ -54,7 +56,11 @@ const PolarChartBase = (
         {/* https://shopify.github.io/react-native-skia/docs/canvas/contexts/
             we have to re-inject our context to make it available in the skia renderer
          */}
-        <PolarChartProvider {...ctx} canvasSize={canvasSize}>
+        <PolarChartProvider
+          {...ctx}
+          canvasSize={canvasSize}
+          diagramSize={diagramSize}
+        >
           {children}
         </PolarChartProvider>
       </Canvas>

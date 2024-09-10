@@ -23,6 +23,7 @@ export const PieChart = (props: PieChartProps) => {
   } = props;
   const {
     canvasSize,
+    diagramSize,
     data: _data,
     labelKey,
     valueKey,
@@ -36,7 +37,13 @@ export const PieChart = (props: PieChartProps) => {
   );
 
   const { width, height } = canvasSize; // Get the dynamic canvas size
-  const radius = Math.min(width, height) / 2; // Calculate the radius based on canvas size
+  const { width: dWidth, height: dHeight } = { ...canvasSize, ...diagramSize };
+
+  const padding = { x: (width - dWidth) / 2, y: (height - dHeight) / 2 };
+
+  console.log({ padding, width, height, dHeight, dWidth });
+
+  const radius = Math.min(dWidth, dHeight) / 2; // Calculate the radius based on canvas size
   const center = vec(width / 2, height / 2);
 
   const data = React.useMemo(() => {
