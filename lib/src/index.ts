@@ -77,3 +77,8 @@ export { Pie, type PieSliceData } from "./pie";
 
 export { useSlicePath } from "./pie/hooks/useSlicePath";
 export { useSliceAngularInsetPath } from "./pie/hooks/useSliceAngularInsetPath";
+
+export {
+  calculatePointOnCircumference,
+  degreesToRadians,
+} from "./pie/utils/radians";

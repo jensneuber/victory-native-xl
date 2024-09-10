@@ -25,6 +25,7 @@ export const PieChart = (props: PieChartProps) => {
   } = props;
   const {
     canvasSize,
+    diagramSize,
     data: _data,
     labelKey,
     valueKey,
@@ -37,13 +38,15 @@ export const PieChart = (props: PieChartProps) => {
     0,
   );
 
-  const width = size ?? canvasSize.width; // Get the dynamic canvas size
-  const height = size ?? canvasSize.height; // Get the dynamic canvas size
+  const { width, height } = canvasSize; // Get the dynamic canvas size
+  const { width: dWidth, height: dHeight } = { ...canvasSize, ...diagramSize };
 
-  // The size of the chart will need to be adjusted if the labels are positioned outside the chart.
-  // ie we need to decrease the Pie Charts radius to account for the labels so the labels don't get cut off.
-  const radius = Math.min(width, height) / 2; // Calculate the radius based on canvas size
-  const center = vec(canvasSize.width / 2, canvasSize.height / 2);
+  const padding = { x: (width - dWidth) / 2, y: (height - dHeight) / 2 };
+
+  console.log({ padding, width, height, dHeight, dWidth });
+
+  const radius = Math.min(dWidth, dHeight) / 2; // Calculate the radius based on canvas size
+  const center = vec(width / 2, height / 2);
 
   const data = React.useMemo(() => {
     let startAngle = _startAngle; // Initialize the start angle for the first slice

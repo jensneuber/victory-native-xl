@@ -30,6 +30,7 @@ type PolarChartBaseProps = {
   containerStyle?: StyleProp<ViewStyle>;
   canvasStyle?: StyleProp<ViewStyle>;
   transformState?: ChartTransformState;
+  diagramSize?: { width: number; height: number };
 };
 
 const PolarChartBase = (
@@ -43,6 +44,7 @@ const PolarChartBase = (
     hasMeasuredLayoutSize,
     canvasSize,
     transformState,
+    diagramSize,
   } = props;
   const { width, height } = canvasSize;
   const Bridge: ContextBridge = useContextBridge();
