@@ -1,14 +1,23 @@
-import { LinearGradient, useFont, vec } from "@shopify/react-native-skia";
+import {
+  DashPathEffect,
+  LinearGradient,
+  useFont,
+  vec,
+  type Color,
+} from "@shopify/react-native-skia";
 import React, { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Bar, CartesianChart } from "victory-native";
 import { useDarkMode } from "react-native-dark";
 import inter from "../assets/inter-medium.ttf";
 import { appColors } from "./consts/colors";
+import { InputSwitch } from "../components/InputSwitch";
 import { InputSlider } from "../components/InputSlider";
 import { Button } from "../components/Button";
 import { InfoCard } from "../components/InfoCard";
 import { descriptionForRoute } from "./consts/routes";
+import { InputSegment } from "../components/InputSegment";
+import { InputColor } from "../components/InputColor";
 
 const DATA = (length: number = 10) =>
   Array.from({ length }, (_, index) => ({
@@ -23,6 +32,11 @@ export default function BarChartPage(props: { segment: string }) {
   const [data, setData] = useState(DATA(5));
   const [innerPadding, setInnerPadding] = useState(0.33);
   const [roundedCorner, setRoundedCorner] = useState(5);
+  const [showLabels, setShowLabels] = useState(false);
+  const [labelColor, setLabelColor] = useState<Color>("#262626");
+  const [labelPosition, setLabelPosition] = useState<
+    "top" | "bottom" | "left" | "right"
+  >("top");
 
   return (
     <>
@@ -34,38 +48,48 @@ export default function BarChartPage(props: { segment: string }) {
             yKeys={["listenCount"]}
             domainPadding={{ left: 50, right: 50, top: 30 }}
             domain={{ y: [0, 100] }}
-            axisOptions={{
+            xAxis={{
               font,
               tickCount: 5,
+              labelColor: isDark ? appColors.text.dark : appColors.text.light,
+              lineWidth: 0,
               formatXLabel: (value) => {
                 const date = new Date(2023, value - 1);
                 return date.toLocaleString("default", { month: "short" });
               },
-              lineColor: isDark ? "#71717a" : "#d4d4d8",
-              labelColor: isDark ? appColors.text.dark : appColors.text.light,
+              linePathEffect: <DashPathEffect intervals={[4, 4]} />,
             }}
+            frame={{
+              lineWidth: 0,
+            }}
+            yAxis={[
+              {
+                yKeys: ["listenCount"],
+                font,
+                linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+              },
+            ]}
             data={data}
           >
             {({ points, chartBounds }) => {
               return (
-                <>
-                  <Bar
-                    points={points.listenCount}
-                    chartBounds={chartBounds}
-                    animate={{ type: "spring" }}
-                    innerPadding={innerPadding}
-                    roundedCorners={{
-                      topLeft: roundedCorner,
-                      topRight: roundedCorner,
-                    }}
-                  >
-                    <LinearGradient
-                      start={vec(0, 0)}
-                      end={vec(0, 400)}
-                      colors={["#a78bfa", "#a78bfa50"]}
-                    />
-                  </Bar>
-                </>
+                <Bar
+                  points={points.listenCount}
+                  chartBounds={chartBounds}
+                  animate={{ type: "spring" }}
+                  innerPadding={innerPadding}
+                  roundedCorners={{
+                    topLeft: roundedCorner,
+                    topRight: roundedCorner,
+                  }}
+                  labels={{ font, color: labelColor, position: labelPosition }}
+                >
+                  <LinearGradient
+                    start={vec(0, 0)}
+                    end={vec(0, 400)}
+                    colors={["#a78bfa", "#a78bfa50"]}
+                  />
+                </Bar>
               );
             }}
           </CartesianChart>
@@ -113,6 +137,26 @@ export default function BarChartPage(props: { segment: string }) {
             value={roundedCorner}
             onChange={setRoundedCorner}
           />
+          <InputSwitch
+            label="Show Data Labels"
+            value={showLabels}
+            onChange={setShowLabels}
+          />
+          {showLabels && (
+            <>
+              <InputSegment<"top" | "bottom" | "left" | "right">
+                value={labelPosition}
+                label=" Label Position"
+                values={["top", "bottom", "left", "right"]}
+                onChange={setLabelPosition}
+              />
+              <InputColor
+                label="Inset color"
+                color={labelColor as string}
+                onChange={setLabelColor}
+              />
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </>

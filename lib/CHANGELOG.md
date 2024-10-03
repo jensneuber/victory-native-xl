@@ -1,5 +1,39 @@
 # victory-native
 
+## 41.6.0
+
+### Minor Changes
+
+- Add dashed path effect option for X and Y axes ([#372](https://github.com/FormidableLabs/victory-native-xl/pull/372))
+
+## 41.5.0
+
+### Minor Changes
+
+- Added domain property for multiple y axes ([#375](https://github.com/FormidableLabs/victory-native-xl/pull/375))
+
+### Patch Changes
+
+- Fix frame prop ([#379](https://github.com/FormidableLabs/victory-native-xl/pull/379))
+
+## 41.4.0
+
+### Minor Changes
+
+- Add multiple y-axis support ([#352](https://github.com/FormidableLabs/victory-native-xl/pull/352))
+
+## 41.3.0
+
+### Minor Changes
+
+- Added pie chart labels ([#362](https://github.com/FormidableLabs/victory-native-xl/pull/362))
+
+## 41.2.0
+
+### Minor Changes
+
+- Added labels to bar charts. ([#353](https://github.com/FormidableLabs/victory-native-xl/pull/353))
+
 ## 41.1.2
 
 ### Patch Changes

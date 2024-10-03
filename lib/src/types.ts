@@ -1,6 +1,10 @@
 import { type SharedValue } from "react-native-reanimated";
 import { type ScaleLinear } from "d3-scale";
-import { type Color, type SkFont } from "@shopify/react-native-skia";
+import {
+  type Color,
+  type DashPathEffect,
+  type SkFont,
+} from "@shopify/react-native-skia";
 
 export type PrimitiveViewWindow = {
   xMin: number;
@@ -70,6 +74,8 @@ export type CartesianChartRenderArg<
 
 export type Scale = ScaleLinear<number, number>;
 
+export type YAxisDomain = [number] | [number, number] | null;
+
 export type PointsArray = {
   x: number;
   xValue: InputFieldType;
@@ -93,6 +99,9 @@ export type ColorFields<T> = {
 
 export type StringKeyOf<T> = Extract<keyof T, string>;
 
+/**
+ * @deprecated This prop will eventually be replaced by the new, separate x/y/frame props below. For now it's being kept around for backwards compatibility sake.
+ */
 export type AxisProps<
   RawData extends Record<string, unknown>,
   XK extends keyof InputFields<RawData>,
@@ -117,6 +126,129 @@ export type AxisProps<
   axisSide?: { x: XAxisSide; y: YAxisSide };
   formatXLabel?: (label: InputFields<RawData>[XK]) => string;
   formatYLabel?: (label: RawData[YK]) => string;
+  domain?: YAxisDomain;
   isNumericalData?: boolean;
   ix?: InputFields<RawData>[XK][];
 };
+
+// The default prop options we pass in
+export type AxisPropWithDefaults<
+  RawData extends Record<string, unknown>,
+  XK extends keyof InputFields<RawData>,
+  YK extends keyof NumericalFields<RawData>,
+> = Omit<
+  Required<AxisProps<RawData, XK, YK>>,
+  | "xScale"
+  | "yScale"
+  | "yTicksNormalized"
+  | "xTicksNormalized"
+  | "font"
+  | "tickValues"
+  | "isNumericalData"
+>;
+// The optional remaining props afterwards
+export type OptionalAxisProps<
+  RawData extends Record<string, unknown>,
+  XK extends keyof InputFields<RawData>,
+  YK extends keyof NumericalFields<RawData>,
+> = {
+  tickValues?: number[] | { x: number[]; y: number[] };
+  font?: SkFont | null;
+  formatXLabel?: (label: InputFields<RawData>[XK]) => string;
+  formatYLabel?: (label: RawData[YK]) => string;
+};
+
+type DashPathEffectProps = React.ComponentProps<typeof DashPathEffect>;
+type DashPathEffectComponent = React.ReactElement<DashPathEffectProps>;
+
+export type XAxisInputProps<
+  RawData extends Record<string, unknown>,
+  XK extends keyof InputFields<RawData>,
+> = {
+  axisSide?: XAxisSide;
+  font?: SkFont | null;
+  formatXLabel?: (label: InputFields<RawData>[XK]) => string;
+  labelColor?: string;
+  labelOffset?: number;
+  labelPosition?: AxisLabelPosition;
+  lineColor?: Color;
+  lineWidth?: number;
+  tickCount?: number;
+  tickValues?: number[];
+  yAxisSide?: YAxisSide;
+  linePathEffect?: DashPathEffectComponent;
+};
+
+export type XAxisPropsWithDefaults<
+  RawData extends Record<string, unknown>,
+  XK extends keyof InputFields<RawData>,
+> = Required<
+  Omit<XAxisInputProps<RawData, XK>, "font" | "tickValues" | "linePathEffect">
+> &
+  Partial<
+    Pick<XAxisInputProps<RawData, XK>, "font" | "tickValues" | "linePathEffect">
+  >;
+
+export type XAxisProps<
+  RawData extends Record<string, unknown>,
+  XK extends keyof InputFields<RawData>,
+> = XAxisPropsWithDefaults<RawData, XK> & {
+  xScale: Scale;
+  yScale: Scale;
+  isNumericalData: boolean;
+  ix: InputFields<RawData>[XK][];
+};
+
+export type YAxisInputProps<
+  RawData extends Record<string, unknown>,
+  YK extends keyof NumericalFields<RawData>,
+> = {
+  axisSide?: YAxisSide;
+  font?: SkFont | null;
+  formatYLabel?: (label: RawData[YK]) => string;
+  labelColor?: string;
+  labelOffset?: number;
+  labelPosition?: AxisLabelPosition;
+  lineColor?: Color;
+  lineWidth?: number;
+  tickCount?: number;
+  tickValues?: number[];
+  yKeys?: YK[];
+  domain?: YAxisDomain;
+  linePathEffect?: DashPathEffectComponent;
+};
+
+export type YAxisPropsWithDefaults<
+  RawData extends Record<string, unknown>,
+  YK extends keyof NumericalFields<RawData>,
+> = Required<
+  Omit<YAxisInputProps<RawData, YK>, "font" | "tickValues" | "linePathEffect">
+> &
+  Partial<
+    Pick<YAxisInputProps<RawData, YK>, "font" | "tickValues" | "linePathEffect">
+  >;
+
+export type YAxisProps<
+  RawData extends Record<string, unknown>,
+  YK extends keyof NumericalFields<RawData>,
+> = YAxisPropsWithDefaults<RawData, YK> & {
+  xScale: Scale;
+  yScale: Scale;
+  yTicksNormalized: number[];
+  yKeys: YK[];
+};
+
+export type FrameInputProps = {
+  lineWidth?: number;
+  lineColor?: Color;
+  linePathEffect?: DashPathEffectComponent;
+};
+export type FramePropsWithDefaults = Required<
+  Omit<FrameInputProps, "linePathEffect">
+> & { linePathEffect?: DashPathEffectComponent };
+export type FrameProps = FramePropsWithDefaults & {
+  xScale: Scale;
+  yScale: Scale;
+};
+
+export type NonEmptyArray<T> = [T, ...T[]];

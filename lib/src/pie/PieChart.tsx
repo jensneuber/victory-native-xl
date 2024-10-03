@@ -43,7 +43,10 @@ export const PieChart = (props: PieChartProps) => {
 
   console.log({ padding, width, height, dHeight, dWidth });
 
+  // The size of the chart will need to be adjusted if the labels are positioned outside the chart.
+  // ie we need to decrease the Pie Charts radius to account for the labels so the labels don't get cut off.
   const radius = Math.min(dWidth, dHeight) / 2; // Calculate the radius based on canvas size
+
   const center = vec(width / 2, height / 2);
 
   const data = React.useMemo(() => {

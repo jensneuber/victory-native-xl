@@ -79,10 +79,20 @@ export const ChartRoutes: {
     path: "/ordinal-data",
   },
   {
+    title: "Horizontal bands background",
+    description: `Custom horizontal bands background for a chart line, implemented through a custom shader.`,
+    path: "/horizontal-bands-line",
+  },
+  {
     title: "Axis Configuration",
     description:
       "This shows off the various ways to configure custom axis rendering.",
     path: "/axis-configuration",
+  },
+  {
+    title: "Multiple Y Axes",
+    description: "This shows how to use multiple y axes in a single chart",
+    path: "/multiple-y-axes",
   },
   {
     title: "Custom Shaders",
@@ -107,6 +117,11 @@ export const ChartRoutes: {
     description:
       "This is mixture of Pie and Donut charts, showing off the different ways to customize the charts.",
     path: "/pie-and-donut-charts",
+  },
+  {
+    title: "Dashed Axes",
+    description: "This is an Area chart with dashed X and Y axes.",
+    path: "/dashed-axes",
   },
 ];
 
